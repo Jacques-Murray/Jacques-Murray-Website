@@ -1,0 +1,36 @@
+name: CI-SFTP-Jacques-Murray-Website
+
+# Controls when the action will run
+on:
+  # Triggers the workflow on push or pull request events, but only for master branch
+  push:
+    branches: [staging]
+
+  # Allow workflow to be run manually from Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflows contains a single job called "SFTP"
+  deploy-via-sftp:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: SFTP Deploy
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.1
+        with:
+          username: ${{ secrets.SSH_USERNAME }}
+          server: ${{ secrets.SERVER_NAME }}
+          port: 22
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          # Local Path
+          local_path: ./*
+
+          # Remote Path
+          remote_path: /home/jacquesmurrayme/public_html/staging
+
+          # SFTP Arguments
+          args: "-o ConnectTimeout=5"
