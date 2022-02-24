@@ -11,26 +11,18 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflows contains a single job called "SFTP"
-  deploy-via-sftp:
+  deploy_job:
     runs-on: ubuntu-latest
+    name: Deploy to Production
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: SFTP Deploy
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
-          username: ${{ secrets.SSH_USERNAME }}
-          server: ${{ secrets.SERVER_NAME }}
-          port: 22
+          username: "jacquesmurrayme"
+          server: "jacquesmurray.me"
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-          # Local Path
-          local_path: ./*
-
-          # Remote Path
-          remote_path: /home/jacquesmurrayme/public_html/staging
-
-          # SFTP Arguments
+          local_path: "./*"
+          remote_path: "/home/jacquesmurrayme/public_html/staging"
           args: "-o ConnectTimeout=5"
